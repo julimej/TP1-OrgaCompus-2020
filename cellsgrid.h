@@ -1,8 +1,8 @@
 #ifndef __CELLS_GRID_H__
 #define __CELLS_GRID_H__
 
-#include "cell.h"
 #include <stdlib.h>
+#include <stdint.h>
 
 #define CELL_AT(x,y,r,c) ((x) * (r) + (y))
 

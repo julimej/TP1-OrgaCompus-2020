@@ -4,7 +4,7 @@ OBJS= tp1_asm
 
 all: tp1_cells
 
-tp1_cells: cell.h cellsgrid.h cellsgrid.c main.c
+tp1_cells: cellsgrid.h cellsgrid.c main.c
 	gcc -g $^ -o $@
 
 clean:
