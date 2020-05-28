@@ -42,11 +42,14 @@ void play (cells_grid_t* board) {
 
 	int	a;
 
-    cells_grid_t* newboard = make_grid(board->rows,board->columns);
+    unsigned int rows = board->rows;
+    unsigned int columns = board->columns;
+
+    cells_grid_t* newboard = make_grid(rows,columns);
 	
-	for (int column=0; column<board->columns; column++) {
-        for (int row=0; row<board->rows; row++) {
-            a = vecinos(board->grid, row, column,board->rows,board->columns);
+	for (int column=0; column<columns; column++) {
+        for (int row=0; row<rows; row++) {
+            a = vecinos(board->grid, row, column,rows,columns);
             if (get_cell_at(board,row,column) && (a == 2 || a == 3)) set_cell_alive(newboard,row,column);
             if (!get_cell_at(board,row,column) && a == 3) set_cell_alive(newboard,row,column);
             if (a < 2 && a > 3) set_cell_dead(newboard,row,column);
@@ -54,8 +57,8 @@ void play (cells_grid_t* board) {
     }
 
 	
-	for (int row=0; row<board->rows; row++) {
-        for (int column=0; column<board->columns; column++) {
+	for (int row=0; row<rows; row++) {
+        for (int column=0; column<columns; column++) {
 	    	if (get_cell_at(newboard,row,column)) {
                 set_cell_alive(board,row,column);
             } else {
@@ -67,25 +70,15 @@ void play (cells_grid_t* board) {
     destroy_grid(newboard);
 }
 
-int main(int argc, char const *argv[]) {
-
-    static struct option long_options[] = {
-        {"help", 0, 0, 'h'},
-        {"version", 0, 0, 'v'},
-        {"prefijo", 0, 0, 'o'},
-        {0, 5, 0, 0}
-    };
-
-    static int long_index = 0;
+int main(int argc, char * const argv[]) {
 
     int opt, s, len = 0;
 
-    uint32_t iterations, width, height;
+    unsigned int iterations, width = 0, height;
     char* prefix; 
     char* filename; 
 
-    while ((opt = getopt_long(argc, argv, "o:hv:", long_options, &long_index)) != -1) {
-
+    while ((opt = getopt(argc, argv, "o:hv:")) != -1) {
         switch(opt) {
             case 'o': 
                 if (argc == 7) {
@@ -119,7 +112,7 @@ int main(int argc, char const *argv[]) {
         }
     }
 
-    if (opt == ""){
+    if (opt == -1){
         if (argc == 5) {
             iterations = atoi(argv[1]);
             width = atoi(argv[2]);
@@ -134,7 +127,12 @@ int main(int argc, char const *argv[]) {
 
     cells_grid_t *grid = make_grid(height,width);
 
-    read_file(width,height,grid,filename);
+    int result = read_file(width,height,grid,filename);
+    
+    if (result != 0) {
+        destroy_grid(grid);
+        return 1;
+    }
     
     for (int i=0; i<iterations; i++) {
 		print(grid,prefix,i);
