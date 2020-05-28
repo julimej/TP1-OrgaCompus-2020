@@ -32,17 +32,30 @@ void read_file(int width,int height,cells_grid_t* board, const char *name) {
 	fclose (f);
 }
 
-void print (cells_grid_t* board) {
-	
+void print (cells_grid_t* board, char* prefix, int iter) {
+    FILE* f;
+
+    char filename[160];
+    snprintf(filename, sizeof filename, "%s_%d", prefix, iter);
+
+    f = fopen(filename,"w");
+
+    if (f == NULL) {
+        fprintf(stderr,"Error al crear el archivo de salida");
+        return;
+    }
+    
 	for (int column=0; column<board->columns; column++) {
 
 		/* print each column position... */
 
 		for (int row=0; row<board->rows; row++) {
-			printf ("%c", get_cell_at(board,row,column) ? 'x' : '.');
+			fprintf(f,"%c", get_cell_at(board,row,column) ? 'x' : '.');
 		}
 
 		/* followed by a carriage return */
-        printf ("\n");
+        fprintf(f,"\n");
 	}
+
+    fclose(f);
 }
