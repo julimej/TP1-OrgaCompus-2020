@@ -12,6 +12,10 @@ static void show_warn(const char *p) {
      fprintf(stderr, " %s\n", p);
 }
 
+void show_error_dim(char* medida) {
+    fprintf(stderr,"El %s debe ser mayor a 0\n",medida);
+}
+
 static void show_help() {
     fprintf(stderr, " ./tpi_cells <iterations> <width> <height> <filename> -o <prefix>\n");
     fprintf(stderr, "  -h --help: Print this message and exit\n");
@@ -74,7 +78,7 @@ int main(int argc, char * const argv[]) {
 
     int opt, s, len = 0;
 
-    unsigned int iterations, width = 0, height;
+    unsigned int iterations, width = 0, height = 0;
     char* prefix; 
     char* filename; 
 
@@ -82,9 +86,26 @@ int main(int argc, char * const argv[]) {
         switch(opt) {
             case 'o': 
                 if (argc == 7) {
-                    iterations = atoi(argv[1]);
-                    width = atoi(argv[2]);
-                    height = atoi(argv[3]);
+                    if (atoi(argv[1]) <= 0) {
+                        show_error_dim("iteraciones");
+                        exit(2);
+                    } else {
+                        iterations = atoi(argv[1]);
+                    }
+                    if (atoi(argv[2]) <= 0) {
+                        show_error_dim("width");
+                        exit(2);
+                    } else {
+                        width = atoi(argv[2]);
+                    }
+                    
+                    if (atoi(argv[3]) <= 0) {
+                        show_error_dim("height");
+                        exit(2);
+                    } else {
+                        height = atoi(argv[3]);
+                    }
+
                     filename = argv[4];
                 } else {
                     show_help();
@@ -112,11 +133,27 @@ int main(int argc, char * const argv[]) {
         }
     }
 
-    if (opt == -1){
+    if (width == 0){
         if (argc == 5) {
-            iterations = atoi(argv[1]);
-            width = atoi(argv[2]);
-            height = atoi(argv[3]);
+            if (atoi(argv[1]) <= 0) {
+                show_error_dim("iteraciones");
+                exit(2);
+            } else {
+                iterations = atoi(argv[1]);
+            }
+            if (atoi(argv[2]) <= 0) {
+                show_error_dim("width");
+                exit(2);
+            } else {
+                width = atoi(argv[2]);
+            }
+            
+            if (atoi(argv[3]) <= 0) {
+                show_error_dim("height");
+                exit(2);
+            } else {
+                height = atoi(argv[3]);
+            }
             filename = argv[4];
             prefix = filename;
         } else {
