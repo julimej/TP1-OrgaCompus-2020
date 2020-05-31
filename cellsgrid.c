@@ -17,15 +17,15 @@ cells_grid_t* make_grid(unsigned int height,unsigned int width) {
 }
 
 
-char get_cell_at(cells_grid_t* self, uint32_t row, uint32_t column) {
+char get_cell_at(cells_grid_t* self, unsigned int row, unsigned int column) {
     return self->grid[CELL_AT(row,column,self->rows,self->columns)];
 }
 
-void set_cell_alive(cells_grid_t* self,uint32_t row, uint32_t column) {
+void set_cell_alive(cells_grid_t* self,unsigned int row, unsigned int column) {
     self->grid[CELL_AT(row,column,self->rows,self->columns)] = 1;
 }
 
-void set_cell_dead(cells_grid_t* self,uint32_t row, uint32_t column) {
+void set_cell_dead(cells_grid_t* self,unsigned int row, unsigned int column) {
     self->grid[CELL_AT(row,column,self->rows,self->columns)] = 0;
 }
 

@@ -4,8 +4,10 @@ OBJS= tp1_asm
 
 all: tp1_cells
 
-tp1_cells: cellsgrid.h cellsgrid.c main.c
+tp1_cells: cellsgrid.h cellsgrid.c game_of_life.c
 	gcc -g $^ -o $@
+
+tpi_cells_asm: cellsgrid.h cellsgrid game_of_life.c
 
 clean:
 	rm tp1_*
