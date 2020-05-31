@@ -29,37 +29,37 @@ static void show_version() {
   printf("v1.0.0\n");
 }
 
-void play (cells_grid_t* board) {
+// void play (cells_grid_t* board) {
 
-	int	a;
+// 	int	a;
 
-    unsigned int rows = board->rows;
-    unsigned int columns = board->columns;
+//     unsigned int rows = board->rows;
+//     unsigned int columns = board->columns;
 
-    cells_grid_t* newboard = make_grid(rows,columns);
+//     cells_grid_t* aux_grid = make_grid(rows,columns);
 	
-	for (int column=0; column<columns; column++) {
-        for (int row=0; row<rows; row++) {
-            a = vecinos(board->grid, row, column,rows,columns);
-            if (get_cell_at(board,row,column) && (a == 2 || a == 3)) set_cell_alive(newboard,row,column);
-            if (!get_cell_at(board,row,column) && a == 3) set_cell_alive(newboard,row,column);
-            if (a < 2 && a > 3) set_cell_dead(newboard,row,column);
-    	}	
-    }
+// 	for (int column=0; column<columns; column++) {
+//         for (int row=0; row<rows; row++) {
+//             a = vecinos(board->grid, row, column,rows,columns);
+//             if (get_cell_at(board,row,column) && (a == 2 || a == 3)) set_cell_alive(aux_grid,row,column);
+//             if (!get_cell_at(board,row,column) && a == 3) set_cell_alive(aux_grid,row,column);
+//             if (a < 2 && a > 3) set_cell_dead(aux_grid,row,column);
+//     	}	
+//     }
 
 	
-	for (int row=0; row<rows; row++) {
-        for (int column=0; column<columns; column++) {
-	    	if (get_cell_at(newboard,row,column)) {
-                set_cell_alive(board,row,column);
-            } else {
-                set_cell_dead(board,row,column);
-            }
-	    }
-    }
+// 	for (int row=0; row<rows; row++) {
+//         for (int column=0; column<columns; column++) {
+// 	    	if (get_cell_at(aux_grid,row,column)) {
+//                 set_cell_alive(board,row,column);
+//             } else {
+//                 set_cell_dead(board,row,column);
+//             }
+// 	    }
+//     }
 
-    destroy_grid(newboard);
-}
+//     destroy_grid(aux_grid);
+//}
 
 int main(int argc, char * const argv[]) {
 
@@ -158,11 +158,44 @@ int main(int argc, char * const argv[]) {
         return 1;
     }
     
+
+	int	a;
+
+    unsigned int rows = grid->rows;
+    unsigned int columns = grid->columns;
+
+    cells_grid_t* aux_grid = make_grid(rows,columns);
+	
+
+
     for (int i=0; i<iterations; i++) {
-		print(grid,prefix,i);
-		play(grid);
+		
+        print(grid,prefix,i);
+
+		for (int column=0; column<columns; column++) {
+            for (int row=0; row<rows; row++) {
+                a = vecinos(grid->grid, row, column,rows,columns);
+                if (get_cell_at(grid,row,column) && (a == 2 || a == 3)) set_cell_alive(aux_grid,row,column);
+                if (!get_cell_at(grid,row,column) && a == 3) set_cell_alive(aux_grid,row,column);
+                if (a < 2 && a > 3) set_cell_dead(aux_grid,row,column);
+            }	
+        }
+
+        
+        for (int row=0; row<rows; row++) {
+            for (int column=0; column<columns; column++) {
+                if (get_cell_at(aux_grid,row,column)) {
+                    set_cell_alive(grid,row,column);
+                } else {
+                    set_cell_dead(grid,row,column);
+                }
+                set_cell_dead(aux_grid,row,column);
+            }
+        }
+
 	}
 
+    destroy_grid(aux_grid);
     destroy_grid(grid);
 
     return 0;
