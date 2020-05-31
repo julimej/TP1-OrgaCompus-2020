@@ -6,7 +6,7 @@
 #include <stdint.h>
 
 #include "cellsgrid.h"
-#include "filereader.c"
+#include "utils.c"
 
 int vecinos(unsigned char* board, unsigned int i, unsigned int j, unsigned int rows, unsigned int columns);
 
