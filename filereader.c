@@ -10,6 +10,8 @@ int read_file(int width,int height,cells_grid_t* board, const char *name) {
 
 	f = fopen (name, "r");
 	
+    printf("Leyendo estado inicial..\n");
+
     if (f == NULL) {
         fprintf(stderr,"Error al abrir el archivo: %s\n",name);
         return 1;
@@ -45,7 +47,7 @@ int read_file(int width,int height,cells_grid_t* board, const char *name) {
     return 0;
 }
 
-void print (cells_grid_t* board, const char* prefix, int iter) {
+void save_state(cells_grid_t* board, const char* prefix, int iter) {
     FILE* f;
 
     char filename[160];
@@ -57,7 +59,8 @@ void print (cells_grid_t* board, const char* prefix, int iter) {
         fprintf(stderr,"Error al crear el archivo de salida %s\n", filename);
         return;
     }
-    
+
+    printf("Grabando %s\n",filename);    
 	for (int column=0; column<board->columns; column++) {
 
 		for (int row=0; row<board->rows; row++) {

@@ -170,7 +170,7 @@ int main(int argc, char * const argv[]) {
 
     for (int i=0; i<iterations; i++) {
 		
-        print(grid,prefix,i);
+        save_state(grid,prefix,i);
 
 		for (int column=0; column<columns; column++) {
             for (int row=0; row<rows; row++) {
@@ -197,6 +197,8 @@ int main(int argc, char * const argv[]) {
 
     destroy_grid(aux_grid);
     destroy_grid(grid);
+
+    printf("Listo\n");
 
     return 0;
 }
