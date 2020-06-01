@@ -4,10 +4,10 @@ OBJS= tp1_asm
 
 all: tp1_cells tp1_cells_asm
 
-tp1_cells: cellsgrid.h cellsgrid.c vecinos.c game_of_life.c
+tp1_cells: cellsgrid.h cellsgrid.c utils.h utils.c vecinos.c game_of_life.c
 	gcc -g $^ -o $@
 
-tp1_cells_asm: cellsgrid.h cellsgrid.c vecinos.S game_of_life.c
+tp1_cells_asm: cellsgrid.h cellsgrid.c utils.h utils.c vecinos.S game_of_life.c
 	gcc -g $(CFLAGS) $^ -o $@
 
 clean:

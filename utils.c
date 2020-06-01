@@ -51,7 +51,7 @@ void save_state(cells_grid_t* board, const char* prefix, int iter) {
     FILE* f;
 
     char filename[160];
-    snprintf(filename, sizeof filename, "%s_%d", prefix, iter);
+    snprintf(filename, sizeof filename, "%s_%d.%s", prefix, iter,"pbm");
 
     f = fopen(filename,"w");
 
@@ -61,14 +61,22 @@ void save_state(cells_grid_t* board, const char* prefix, int iter) {
     }
 
     printf("Grabando %s\n",filename);    
-	for (int column=0; column<board->columns; column++) {
+    fprintf(f,"%s\n","P1");
+    fprintf(f,"%d %d\n",board->columns*8,board->rows*8);
+    for (int column=0; column<board->columns; column++) {
+	    for (size_t j = 0; j < 8; j++) {
 
-		for (int row=0; row<board->rows; row++) {
-			fprintf(f,"%c", get_cell_at(board,row,column) ? 'x' : '.');
-		}
+            for (int row=0; row<board->rows; row++) {
+                for (size_t i = 0; i < 8; i++) {          
+                    fprintf(f,"%c ", get_cell_at(board,row,column) ? '1' : '0');
+                }
+            }
+            
 
-        fprintf(f,"\n");
-	}
+            fprintf(f,"\n");
+        }
+
+    }
 
     fclose(f);
 }

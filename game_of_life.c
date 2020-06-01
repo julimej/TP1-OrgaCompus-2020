@@ -6,7 +6,7 @@
 #include <stdint.h>
 
 #include "cellsgrid.h"
-#include "utils.c"
+#include "utils.h"
 
 int vecinos(unsigned char* board, unsigned int i, unsigned int j, unsigned int rows, unsigned int columns);
 
@@ -29,37 +29,6 @@ static void show_version() {
   printf("v1.0.0\n");
 }
 
-// void play (cells_grid_t* board) {
-
-// 	int	a;
-
-//     unsigned int rows = board->rows;
-//     unsigned int columns = board->columns;
-
-//     cells_grid_t* aux_grid = make_grid(rows,columns);
-	
-// 	for (int column=0; column<columns; column++) {
-//         for (int row=0; row<rows; row++) {
-//             a = vecinos(board->grid, row, column,rows,columns);
-//             if (get_cell_at(board,row,column) && (a == 2 || a == 3)) set_cell_alive(aux_grid,row,column);
-//             if (!get_cell_at(board,row,column) && a == 3) set_cell_alive(aux_grid,row,column);
-//             if (a < 2 && a > 3) set_cell_dead(aux_grid,row,column);
-//     	}	
-//     }
-
-	
-// 	for (int row=0; row<rows; row++) {
-//         for (int column=0; column<columns; column++) {
-// 	    	if (get_cell_at(aux_grid,row,column)) {
-//                 set_cell_alive(board,row,column);
-//             } else {
-//                 set_cell_dead(board,row,column);
-//             }
-// 	    }
-//     }
-
-//     destroy_grid(aux_grid);
-//}
 
 int main(int argc, char * const argv[]) {
 
@@ -198,6 +167,10 @@ int main(int argc, char * const argv[]) {
     destroy_grid(aux_grid);
     destroy_grid(grid);
 
+    char command[180];
+    snprintf(command, sizeof command,"ffmpeg -start_number 0 -i \"%s_%s.pbm\" %svideo.mov",prefix,"%d",prefix);
+    system(command); 
+    
     printf("Listo\n");
 
     return 0;
