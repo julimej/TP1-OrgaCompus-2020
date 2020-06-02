@@ -136,10 +136,10 @@ int main(int argc, char * const argv[]) {
     cells_grid_t* aux_grid = make_grid(rows,columns);
 	
 
+    save_state(grid,prefix,0);
 
     for (int i=0; i<iterations; i++) {
 		
-        save_state(grid,prefix,i);
 
 		for (int column=0; column<columns; column++) {
             for (int row=0; row<rows; row++) {
@@ -162,15 +162,12 @@ int main(int argc, char * const argv[]) {
             }
         }
 
+        save_state(grid,prefix,i+1);
 	}
 
     destroy_grid(aux_grid);
     destroy_grid(grid);
 
-    char command[180];
-    snprintf(command, sizeof command,"ffmpeg -start_number 0 -i \"%s_%s.pbm\" %svideo.mov",prefix,"%d",prefix);
-    system(command); 
-    
     printf("Listo\n");
 
     return 0;
