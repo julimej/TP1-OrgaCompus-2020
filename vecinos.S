@@ -4,7 +4,7 @@
 #define PADDING_Y 1
 
 # Stack size
-#define SS 8
+#define SS 24
 
 # Offset to each argument in the ABA
 #define O_ARG0(sp) (SS + 0)(sp)
@@ -12,6 +12,11 @@
 #define O_ARG2(sp) (SS + 8)(sp)
 #define O_ARG3(sp) (SS + 12)(sp)
 #define O_ARG4(sp) (SS + 16)(sp)
+
+#define O_LTA_K(sp) 0(sp)
+#define O_LTA_L(sp) 4(sp)
+#define O_LTA_ROW(sp) 8(sp)
+#define O_LTA_COLUMN(sp) 12(sp)
 
 # Offset to fp and gp
 #define O_FP(sp) (SS-4)(sp)
@@ -48,7 +53,17 @@ vecinos:
     sw      $a3, O_ARG3($sp)         # Store $a3 in the ABA
     lw      $t7, O_ARG4($sp)         # Load fifth argument (iterations)
 
-    # Store fp and gp
+    # Save LTA
+    li      $t0, -1
+    sw      $t0, O_LTA_K($sp)
+
+    li      $t1, -1
+    sw      $t1, O_LTA_L($sp)
+
+    sw      $zero, O_LTA_ROW($sp)
+    sw      $zero, O_LTA_COLUMN($sp)
+
+    # SRA
     sw	$fp, O_FP($sp)		# Store fp in the ABA
     sw	$gp, O_GP($sp)		# Store gp in the ABA
 
@@ -56,18 +71,18 @@ vecinos:
     addi  $v0, $zero, 0
 
     # Start for loop
-    li    $t0, -1
   outer_loop:
-    bge  $t0, 2, end
-    li    $t1, -1
+    bge   $t0, 2, end
 
     # Set row neightbour position
-    add  $t2, $a1, $t0
+    add   $t2, $a1, $t0
     add   $t2, $t2, $a3
     remu  $t2, $t2, $a3
+    sw    $t2, O_LTA_ROW($sp)
 
     #fijo la proxima posicion
     addi $t0, $t0, 1
+    sw   $t0, O_LTA_K($sp)
   inner_loop:
     bge  $t1, 2, outer_loop
 
@@ -75,6 +90,7 @@ vecinos:
     add   $t3, $a2, $t1
     add   $t3, $t3, $t7
     remu  $t3, $t3, $t7
+    sw    $t3, O_LTA_COLUMN($sp)
 
     # Find and add neightbour
     mul   $t4, $t3, $a3 # multiply $t4 = (row) * (column-neighbour)
@@ -88,7 +104,8 @@ vecinos:
     addi  $t1, $t1, 1
   add2:
     addi  $t1, $t1, 1
-    b inner_loop
+    sw    $t1, O_LTA_L($sp)
+    b     inner_loop
 
   end:
     # Stack unwind
