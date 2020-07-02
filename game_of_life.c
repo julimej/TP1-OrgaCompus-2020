@@ -168,6 +168,9 @@ int main(int argc, char * const argv[]) {
     destroy_grid(aux_grid);
     destroy_grid(grid);
 
+    char command[300];
+    snprintf(command, sizeof command, "ffmpeg -start_number 0 -i %s_%s.%s %s-video.mov", prefix, "%04d","pbm",prefix);
+    system(command);
     printf("Listo\n");
 
     return 0;

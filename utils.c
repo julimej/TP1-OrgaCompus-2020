@@ -51,7 +51,7 @@ void save_state(cells_grid_t* board, const char* prefix, int iter) {
     FILE* f;
 
     char filename[160];
-    snprintf(filename, sizeof filename, "%s_%d.%s", prefix, iter,"pbm");
+    snprintf(filename, sizeof filename, "%s_%04d.%s", prefix, iter,"pbm");
 
     f = fopen(filename,"w");
 
